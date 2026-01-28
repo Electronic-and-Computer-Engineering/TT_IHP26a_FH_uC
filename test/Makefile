@@ -6,18 +6,23 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v
+PROJECT_SOURCES = *.v *.sv
+
+SRC_DIR2 = $(PWD)/../src/serv
+PROJECT_SOURCES2 = *.v
+
 
 ifneq ($(GATES),yes)
 
 # RTL simulation:
 SIM_BUILD				= sim_build/rtl
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
+VERILOG_SOURCES += $(addprefix $(SRC_DIR2)/,$(PROJECT_SOURCES2))
 
 else
 
 # Gate level simulation:
-SIM_BUILD				= sim_build/gl
+SIM_BUILD		 = sim_build/gl
 COMPILE_ARGS    += -DGL_TEST
 COMPILE_ARGS    += -DFUNCTIONAL
 COMPILE_ARGS    += -DSIM
@@ -34,10 +39,17 @@ COMPILE_ARGS 		+= -I$(SRC_DIR)
 
 # Include the testbench sources:
 VERILOG_SOURCES += $(PWD)/tb.v
+VERILOG_SOURCES += $(PWD)/mock_spi_sram.sv
 TOPLEVEL = tb
 
+
 # List test modules to run, separated by commas and without the .py suffix:
-COCOTB_TEST_MODULES = test
+COCOTB_TEST_MODULES = test_blink
+HEX_FILE = blink.hex
+
+# Pass the parameter to Icarus. 
+# Note the escaped quotes (\") are required for string parameters!
+COMPILE_ARGS += -P tb.memfile=\"$(HEX_FILE)\"
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim

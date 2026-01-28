@@ -13,6 +13,24 @@ module tb ();
     #1;
   end
 
+   //parameter memfile = "hello_uart_8b.hex";
+   //parameter memfile = "blink.hex";
+   parameter memfile = "gpio_test.hex";
+   parameter memsize = 8192;
+   parameter sim = 0;
+   parameter debug = 0;
+   parameter width = 1;
+   parameter with_csr = 0;
+   parameter compressed = 0;
+   parameter align = compressed;
+
+      // Comment out direct memory access - SRAM model doesn't expose mem array
+    initial
+    begin
+        $display("Loading RAM from %0s", memfile);
+        $readmemh(memfile, sram_model.mem);
+    end
+
   // Wire up the inputs and outputs:
   reg clk;
   reg rst_n;
@@ -24,7 +42,8 @@ module tb ();
   wire [7:0] uio_oe;
 
   // Replace tt_um_example with your module name:
-  tt_um_example user_project (
+  tt_um_ECM24_serv_soc_top    
+    dut (
       .ui_in  (ui_in),    // Dedicated inputs
       .uo_out (uo_out),   // Dedicated outputs
       .uio_in (uio_in),   // IOs: Input path
@@ -34,5 +53,17 @@ module tb ();
       .clk    (clk),      // clock
       .rst_n  (rst_n)     // not reset
   );
+
+   // Instantiate SRAM model and connect to DUT
+   sram_23lc512_model# (
+        .memsize(memsize)) 
+      sram_model (
+       .sck(uo_out[1]),
+       .cs_n(uo_out[2]),
+       .si(uo_out[0]),
+       .so(ui_in[0])
+   );
+
+
 
 endmodule
