@@ -44,12 +44,12 @@ TOPLEVEL = tb
 
 
 # List test modules to run, separated by commas and without the .py suffix:
-COCOTB_TEST_MODULES = test_blink
-HEX_FILE = blink.hex
+COCOTB_TEST_MODULES = test
+HEX_FILE = gpio_test.hex
 
 # Pass the parameter to Icarus. 
 # Note the escaped quotes (\") are required for string parameters!
-COMPILE_ARGS += -P tb.memfile=\"$(HEX_FILE)\"
+#COMPILE_ARGS += -P tb.memfile=\"$(HEX_FILE)\"
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim
