@@ -28,6 +28,10 @@ module tb ();
     initial
     begin
         $display("Loading RAM from %0s", memfile);
+        // Initialize memory with zeros first
+        for (integer i = 0; i < memsize; i = i + 1) begin
+            sram_model.mem[i] = 8'h00;
+        end
         $readmemh(memfile, sram_model.mem);
     end
 
@@ -40,7 +44,8 @@ module tb ();
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
-
+  wire uart_tx;
+  assign uart_tx = uio_out[5];
   // Replace tt_um_example with your module name:
   tt_um_ECM24_serv_soc_top    
     dut (

@@ -17,9 +17,10 @@ TARGET_NAME = $(basename $(notdir $(SRC)))
 TARGET_ELF = $(BUILD_DIR)/$(TARGET_NAME).elf
 TARGET_BIN = $(BUILD_DIR)/$(TARGET_NAME).bin
 TARGET_HEX = $(TARGET_NAME).hex
+TARGET_ASM = $(BUILD_DIR)/$(TARGET_NAME).S
 
 # Default target
-all: $(TARGET_HEX)
+all: $(TARGET_HEX) $(TARGET_ASM)
 
 # 4. Create the build directory (Order-only prerequisite)
 $(BUILD_DIR):
@@ -38,9 +39,9 @@ $(TARGET_BIN): $(TARGET_ELF)
 $(TARGET_HEX): $(TARGET_BIN)
 	python3 makehex.py $< > $@
 
-# Optional: Generate assembly listing in build folder for inspection
-$(BUILD_DIR)/%.S: %.c | $(BUILD_DIR)
-	$(CC) -S $(OPT) -nostdlib -march=rv32i -mabi=ilp32 -o $@ $<
+# Generate assembly listing for the selected source in build folder
+$(TARGET_ASM): $(SRC) | $(BUILD_DIR)
+	$(CC) -S $(OPT) -nostdlib -march=rv32i -mabi=ilp32 -o $@ $(SRC)
 
 # Clean: Removes build dir and root hex files
 clean:

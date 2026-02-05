@@ -80,7 +80,7 @@ module tt_um_ECM24_serv_soc_top
    assign uio_out[7:6] = 2'b0;
    assign uo_out[3:0] = 4'b0;
   // remove for possible uart
-   assign uio_out[5] = 1'b0;
+  // assign uio_out[5] = 1'b0;
 
    // Internal clock and reset
    wire wb_clk = clk;
@@ -157,7 +157,10 @@ module tt_um_ECM24_serv_soc_top
       .o_wb_ack  (wb_ext_ack),
 
       .i_gpio_in (ui_in[7:4]),
-      .o_gpio_out(uo_out[7:4])
+      .o_gpio_out(uo_out[7:4]),
+
+      .o_uart_tx(uio_out[5]),
+      .i_uart_rx(uio_in[6])
    );
 
    //=============================================================================
