@@ -44,28 +44,44 @@ module tt_um_ECM24_serv_soc_top
    //=============================================================================
    // Pin Mapping
    //=============================================================================
-   // Inputs
-   wire spi_miso = ui_in[0];
-   wire gpio_module_in = ui_in[7:4];
-   wire gpio_module_out  = uo_out[7:4];
-   
+
+
    // Outputs
    wire gpio_out;
    wire spi_mosi;
    wire spi_clk;
    wire spi_cs1_n;
    wire spi_cs2_n;
+
    assign spi_cs2_n = 1'b1;
    
-   assign uo_out[0] = spi_mosi;
-   assign uo_out[1] = spi_clk;
-   assign uo_out[2] = spi_cs1_n;
-   assign uo_out[3] = spi_cs2_n;
-   
-   // Bidirectional pins not used
-   assign uio_out = 8'b0;
-   assign uio_oe  = 8'b0;
-   
+   // pinout taken from https://tinytapeout.com/specs/pinouts/
+   // SPI pins
+   assign uio_out[0] = spi_cs1_n;
+   assign uio_out[1] = spi_mosi;
+   assign uio_out[3]= spi_clk;
+   assign uio_out[4] = spi_cs2_n;
+
+   wire spi_miso = uio_in[2];
+
+   // set bidirectional pins
+   assign uio_oe[0]= 1'b1;  // Output SPI CS1
+   assign uio_oe[1]= 1'b1;  // Output SPI MOSI
+   assign uio_oe[2]= 1'b0;  // Input SPI MISO
+   assign uio_oe[3]= 1'b1;  // Output SPI CLK
+   assign uio_oe[4]= 1'b1;  // Output SPI CS2
+   assign uio_oe[5]= 1'b1;  // Output UART TX (not used)
+   assign uio_oe[6]= 1'b0;  // Input  UART RX (not used)
+   assign uio_oe[7]= 1'b0;  // Input
+
+       
+   // unused  pins
+   assign uio_out[2] = 1'b0;
+   assign uio_out[7:6] = 2'b0;
+   assign uo_out[3:0] = 4'b0;
+  // remove for possible uart
+   assign uio_out[5] = 1'b0;
+
    // Internal clock and reset
    wire wb_clk = clk;
    wire wb_rst = ~rst_n;

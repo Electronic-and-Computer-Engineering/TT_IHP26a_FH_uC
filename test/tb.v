@@ -58,10 +58,10 @@ module tb ();
    sram_23lc512_model# (
         .memsize(memsize)) 
       sram_model (
-       .sck(uo_out[1]),
-       .cs_n(uo_out[2]),
-       .si(uo_out[0]),
-       .so(ui_in[0])
+       .sck(uio_out[3]),
+       .cs_n(uio_out[0]),
+       .si(uio_out[1]),
+       .so(uio_in[2])
    );
 
 

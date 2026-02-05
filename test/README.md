@@ -1,28 +1,49 @@
-# Sample testbench for a Tiny Tapeout project
+# Testbench for tt_um_ECM24_serv_soc_top
 
-This is a sample testbench for a Tiny Tapeout project. It uses [cocotb](https://docs.cocotb.org/en/stable/) to drive the DUT and check the outputs.
-See below to get started or for more information, check the [website](https://tinytapeout.com/hdl/testing/).
+## Running the cocotb test (test.py)
 
-## Setting up
+This project uses a cocotb-based testbench in `test.py` (discovered as the `test` module by the Makefile) to run simulations of the top-level design via the wrapper in `tb.v`.
 
-1. Edit [Makefile](Makefile) and modify `PROJECT_SOURCES` to point to your Verilog files.
-2. Edit [tb.v](tb.v) and replace `tt_um_example` with your module name.
+The test currently:
 
-## How to run
+- Resets the design and enables the core
+- The program is loaded into the on-chip SRAM model
+- Drives a test value on the upper nibble of `ui_in`
+- Checks that the same value appears on the upper nibble of `uo_out` after a number of clock cycles
 
-To run the RTL simulation:
+### Test environment setup
+
+From the `test` directory:
+
+```sh
+cd test
+
+# (optional but recommended) create and activate a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# install Python dependencies for the testbench
+pip install -r requirements.txt
+```
+
+You also need a supported Verilog simulator (the default Makefile configuration uses Icarus Verilog: `iverilog` / `vvp`).
+
+### Running the tests
+
+From the `test` directory, run an RTL simulation (this will execute `test_project` in `test.py`):
 
 ```sh
 make -B
 ```
 
-To run gatelevel simulation, first harden your project and copy `../runs/wokwi/results/final/verilog/gl/{your_module_name}.v` to `gate_level_netlist.v`.
-
-Then run:
+To run a gate-level simulation instead (after hardening and copying your gate-level netlist to `test/gate_level_netlist.v`):
 
 ```sh
 make -B GATES=yes
 ```
+
+Waveforms are written to `tb.fst` by default.
+
 
 If you wish to save the waveform in VCD format instead of FST format, edit tb.v to use `$dumpfile("tb.vcd");` and then run:
 
