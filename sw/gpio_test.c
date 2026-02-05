@@ -18,9 +18,7 @@ int main(void)
         // Drive outputs [3:0] with inputs
         *gpio = in;
         while(1){
-            // 
-            in ^= 0xF;
-            *gpio = in;
+
         }
     }
 }

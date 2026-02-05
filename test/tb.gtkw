@@ -1,11 +1,11 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Tue Jan 27 19:00:49 2026
+[*] Wed Jan 28 19:59:22 2026
 [*]
-[dumpfile] "/mnt/c/Users/Kevin/Desktop/soc/SoCD-FH-uC/test/tb.fst"
-[dumpfile_mtime] "Tue Jan 27 18:59:25 2026"
-[dumpfile_size] 16915
-[savefile] "/mnt/c/Users/Kevin/Desktop/soc/SoCD-FH-uC/test/tb.gtkw"
+[dumpfile] "/mnt/c/Users/Kevin/Desktop/soc/TT_IHP26a_FH_uC/test/tb.vcd"
+[dumpfile_mtime] "Wed Jan 28 19:59:13 2026"
+[dumpfile_size] 39507
+[savefile] "/mnt/c/Users/Kevin/Desktop/soc/TT_IHP26a_FH_uC/test/tb.gtkw"
 [timestart] 0
 [size] 1376 600
 [pos] -1 -1
