@@ -10,8 +10,8 @@ module gpio_if #(
     input  wire [31:0] i_wb_dat,
     input  wire        i_wb_we,
     input  wire        i_wb_stb,
-    output reg  [31:0] o_wb_rdt,
-    output reg         o_wb_ack,
+    output wire [31:0] o_wb_rdt,
+    output wire        o_wb_ack,
 
     // GPIO
     input  wire [3:0]  i_gpio_in,
@@ -63,24 +63,11 @@ module gpio_if #(
     // -------------------------------------------------------------------------
     
     // Global ACK: Asserted if we are selected and strobed
-    
-    assign o_wb_ack =  i_wb_stb ? 1'b1 : 1'b0;
+    assign o_wb_ack = i_wb_stb;
 
-    always_comb begin
-        o_wb_rdt = 32'd0;
-        if (i_wb_stb) begin
-            if (sel_gpio) begin
-                // === GPIO ACCESS ===
-                o_wb_rdt = {24'd0, i_gpio_in, o_gpio_out};
-            end 
-            else if (sel_uart) begin
-                // === UART ACCESS ===
-                // Read: Status + Data
-                o_wb_rdt = {tx_busy, rx_data_valid, 22'd0, rx_data_out};
-            end
-        end
-
-    end
+    assign o_wb_rdt = sel_gpio ? {24'd0, i_gpio_in, o_gpio_out} :
+                      sel_uart ? {tx_busy, rx_data_valid, 22'd0, rx_data_out} :
+                                 32'd0;
     always @(posedge i_wb_clk) begin
         if (i_wb_rst) begin
             // GPIO Reset
