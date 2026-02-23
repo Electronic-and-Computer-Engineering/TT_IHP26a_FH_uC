@@ -35,4 +35,13 @@ async def test_project(dut):
     while (len(rx_data) < len("Hello, World!")):
         rx_data.extend(await uart_sink.read())
     assert rx_data == b"Hello, World!", f"Expected UART output to be 'Hello, World!', got {rx_data.decode()}"
+
+    uart_source = UartSource(dut.uart_rx, baud=9600, bits=8)
+    txData = b"TEST"
+    await uart_source.write(txData)
+    rx_data = bytearray()
+    while (len(rx_data) < len(txData)):
+        rx_data.extend(await uart_sink.read())
+
+    assert rx_data == txData, f"Expected UART input to be {txData}, got {rx_data}"
     dut._log.info("End")

@@ -46,6 +46,13 @@ module tb ();
   wire [7:0] uio_oe;
   wire uart_tx;
   assign uart_tx = uio_out[5];
+
+
+  
+  // Wire up UART RX input
+  wire uart_rx;
+  assign uio_in[6] = uart_rx ;
+
   // Replace tt_um_example with your module name:
   tt_um_ECM24_serv_soc_top    
     dut (

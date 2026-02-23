@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Thu Feb  5 16:55:20 2026
+[*] Mon Feb 23 11:49:26 2026
 [*]
 [dumpfile] "/mnt/c/Users/Kevin/Desktop/soc/TT_IHP26a_FH_uC/test/tb.fst"
-[dumpfile_mtime] "Thu Feb  5 16:45:25 2026"
-[dumpfile_size] 218837
+[dumpfile_mtime] "Mon Feb 23 11:48:07 2026"
+[dumpfile_size] 153331
 [savefile] "/mnt/c/Users/Kevin/Desktop/soc/TT_IHP26a_FH_uC/test/tb.gtkw"
-[timestart] 565700000
+[timestart] 14145000000
 [size] 2548 1359
-[pos] 2592 33
-*-24.534533 663200000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] 2608 113
+*-28.534533 15518600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.dut.
 [sst_width] 297
@@ -21,6 +21,7 @@
 -Bidirectional Pins
 -Output Pins
 @28
+tb.uart_rx
 tb.uart_tx
 @22
 tb.sram_model.addr_reg[15:0]
@@ -100,7 +101,7 @@ tb.dut.u_gpio_if.tx_shifter[10:0]
 (7)tb.dut.u_gpio_if.tx_shifter[10:0]
 (8)tb.dut.u_gpio_if.tx_shifter[10:0]
 (9)tb.dut.u_gpio_if.tx_shifter[10:0]
-@1001202
+@1001200
 -group_end
 @28
 (10)tb.dut.u_gpio_if.tx_shifter[10:0]
@@ -110,7 +111,11 @@ tb.dut.u_gpio_if.tx_shifter[10:0]
 tb.dut.u_gpio_if.i_wb_adr[31:0]
 @28
 tb.dut.u_gpio_if.i_wb_we
-@23
+@22
 tb.dut.u_gpio_if.i_wb_adr[31:0]
+@28
+tb.dut.u_gpio_if.rx_data_valid
+@23
+tb.dut.u_gpio_if.rx_shifter[7:0]
 [pattern_trace] 1
 [pattern_trace] 0

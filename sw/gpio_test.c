@@ -20,7 +20,7 @@ void put_char(unsigned int   c) {
     }
     *uart = c;
 }
-char hello[] = "Hello, World!\n";
+char hello[] = "Hello, World!";
 int main(void)
 {
     volatile unsigned int *gpio = (unsigned int *)GPIO_ADDR;
@@ -31,20 +31,27 @@ int main(void)
 
     // Initialize outputs to 0
 
-    while (1)
-    {
 
-        // Read GPIO register
-        unsigned int v = *gpio;
+    // Read GPIO register
+    unsigned int v = *gpio;
 
-        // Extract input bits [7:4]
-        unsigned char in = (v >> 4) & 0xF;
+    // Extract input bits [7:4]
+    unsigned char in = (v >> 4) & 0xF;
 
-        // Drive outputs [3:0] with inputs
-        *gpio = in;
+    // Drive outputs [3:0] with inputs
+    *gpio = in;
 
-        for (int i = 0; hello[i] != '\0'; i++) {
-            put_char(hello[i]);
+    for (int i = 0; hello[i] != '\0'; i++) {
+        put_char(hello[i]);
+    }
+
+    while(1) {
+        char rx_data = '\0';
+        unsigned int uart_data = 0;
+        while ((uart_data & RX_VALID_MASK) == 0) {
+            uart_data = *uart;
         }
+        rx_data = uart_data & 0xFF; // Extract received data byte
+        put_char(rx_data);
     }
 }

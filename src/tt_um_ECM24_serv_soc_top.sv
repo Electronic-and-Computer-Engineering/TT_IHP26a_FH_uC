@@ -70,8 +70,8 @@ module tt_um_ECM24_serv_soc_top
    assign uio_oe[2]= 1'b0;  // Input SPI MISO
    assign uio_oe[3]= 1'b1;  // Output SPI CLK
    assign uio_oe[4]= 1'b1;  // Output SPI CS2
-   assign uio_oe[5]= 1'b1;  // Output UART TX (not used)
-   assign uio_oe[6]= 1'b0;  // Input  UART RX (not used)
+   assign uio_oe[5]= 1'b1;  // Output UART TX
+   assign uio_oe[6]= 1'b0;  // Input  UART RX
    assign uio_oe[7]= 1'b0;  // Input
 
        

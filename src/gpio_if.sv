@@ -90,6 +90,7 @@ module gpio_if #(
             tx_timer   <= 0;
             tx_bit_ctr <= 0;
             tx_shifter <= 11'b11111111111;
+            rx_shifter <= 8'd0;
             o_uart_tx  <= 1'b1;
             rx_timer   <= 0;
             rx_bit_ctr <= 0;
