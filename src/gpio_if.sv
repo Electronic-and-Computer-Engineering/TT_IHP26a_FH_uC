@@ -104,7 +104,6 @@ module gpio_if #(
             if (i_wb_stb) begin
                 if (sel_gpio) begin
                     // === GPIO ACCESS ===
-                    
                     // Write
                     if (i_wb_we) begin
                         o_gpio_out <= i_wb_dat[3:0];
