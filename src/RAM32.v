@@ -23,11 +23,11 @@ module RAM32(
     end
     always @(posedge CLK)
         if(EN0) begin
-            Do0 <= RAM[A0];
             if(WE0[0]) RAM[A0][ 7: 0] <= Di0[7:0];
             if(WE0[1]) RAM[A0][15:8] <= Di0[15:8];
             if(WE0[2]) RAM[A0][23:16] <= Di0[23:16];
             if(WE0[3]) RAM[A0][31:24] <= Di0[31:24];
+            Do0 <= (WE0 != 4'b0) ? Di0 : RAM[A0];
         end
         else
             Do0 <= 32'b0;

@@ -17,8 +17,6 @@ async def test_project(dut):
     TEST_VALUE = 0xA
     # Reset
     dut._log.info("Reset")
-    for address in range(32):
-        dut.dut.rf_ram.RAM[address].value = 0
 
     dut.ena.value = 1
     dut.ui_in.value = TEST_VALUE << 4

@@ -215,11 +215,11 @@ end
 
 // spi outputs  
 assign spi_clk  = clk & shift_enable & (cycle_counter > 0);
-assign spi_cs_n = (state_reg == S_IDLE || state_reg == S_DONE);
+assign spi_cs_n = (state_reg == S_IDLE);
 
 // wishbone outputs
 assign ack   = (state_reg == S_DONE);
-assign dat_o = data_reg;
+assign dat_o = we ? 32'd0 : data_reg;
     
 endmodule
 `default_nettype none

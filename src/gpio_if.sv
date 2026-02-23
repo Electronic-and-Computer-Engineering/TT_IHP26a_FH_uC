@@ -1,3 +1,6 @@
+`default_nettype none
+`timescale 1ns/1ps
+
 module gpio_if #(
     parameter CLK_FREQ  = 10000000,
     parameter BAUD_RATE = 9600
@@ -151,3 +154,4 @@ module gpio_if #(
         end
     end
 endmodule
+`default_nettype wire
