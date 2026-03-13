@@ -24,6 +24,7 @@ source venv/bin/activate
 
 # install Python dependencies for the testbench
 pip install -r requirements.txt
+sudo apt install iverilog
 ```
 
 You also need a supported Verilog simulator (the default Makefile configuration uses Icarus Verilog: `iverilog` / `vvp`).

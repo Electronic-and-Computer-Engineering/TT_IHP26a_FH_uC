@@ -39,26 +39,12 @@ module gpio_if #(
     // -------------------------------------------------------------------------
     localparam TICK_LIMIT = CLK_FREQ / BAUD_RATE;
     localparam TICK_BITS  = $clog2(TICK_LIMIT);
-    localparam HALF_TICK  = TICK_LIMIT / 2;
 
     reg [TICK_BITS-1:0] tx_timer;
     reg [10:0]          tx_shifter;
     reg [3:0]           tx_bit_ctr;
 
-    reg [TICK_BITS-1:0] rx_timer;
-    reg [3:0]           rx_bit_ctr;
-    reg [7:0]           rx_shifter;
-    reg [7:0]           rx_data_out;
-    reg                 rx_data_valid;
-    reg                 rx_busy;
-    reg [1:0]           rx_sync;
-
     wire tx_busy = (tx_bit_ctr != 0);
-    wire rx_line;
-    
-    // Sync RX input
-    always @(posedge i_wb_clk) rx_sync <= {rx_sync[0], i_uart_rx};
-    assign rx_line = rx_sync[1];
 
 
     // -------------------------------------------------------------------------
@@ -66,10 +52,10 @@ module gpio_if #(
     // -------------------------------------------------------------------------
     
     // Global ACK: Asserted if we are selected and strobed
-    assign o_wb_ack = i_wb_stb;
+    assign o_wb_ack = i_wb_stb ? 1'b1 : 1'b0;
 
     assign o_wb_rdt = sel_gpio ? {24'd0, i_gpio_in, o_gpio_out} :
-                      sel_uart ? {tx_busy, rx_data_valid, 22'd0, rx_data_out} :
+                      sel_uart ? {tx_busy, 31'd0} :
                                  32'd0;
     always @(posedge i_wb_clk) begin
         if (i_wb_rst) begin
@@ -80,13 +66,7 @@ module gpio_if #(
             tx_timer   <= 0;
             tx_bit_ctr <= 0;
             tx_shifter <= 11'b11111111111;
-            rx_shifter <= 8'd0;
             o_uart_tx  <= 1'b1;
-            rx_timer   <= 0;
-            rx_bit_ctr <= 0;
-            rx_busy    <= 0;
-            rx_data_valid <= 0;
-            rx_data_out <= 8'd0;
 
         end else begin
             
@@ -106,10 +86,6 @@ module gpio_if #(
                         tx_shifter <= {2'b11, i_wb_dat[7:0], 1'b0};
                         tx_bit_ctr <= 11;
                         tx_timer   <= 0;
-                    end else if (!i_wb_we) begin
-                        // Read: Status + Data
-                        // Clear valid flag
-                        rx_data_valid <= 0;
                     end
                 end
             end
@@ -123,32 +99,6 @@ module gpio_if #(
                     tx_bit_ctr <= tx_bit_ctr - 1;
                 end else begin
                     tx_timer <= tx_timer + 1;
-                end
-            end
-
-            // --- UART RX STATE MACHINE ---
-            if (!rx_busy) begin
-                if (rx_line == 0) begin
-                    rx_busy    <= 1;
-                    rx_timer   <= 0;
-                    rx_bit_ctr <= 0;
-                end
-            end else begin
-                rx_timer <= rx_timer + 1;
-                if (rx_timer == HALF_TICK) begin
-                    if (rx_bit_ctr == 0) begin
-                        if (rx_line == 1) rx_busy <= 0;
-                    end else if (rx_bit_ctr <= 8) begin
-                        rx_shifter <= {rx_line, rx_shifter[7:1]};
-                    end else begin
-                        rx_busy       <= 0;
-                        rx_data_out   <= rx_shifter;
-                        rx_data_valid <= 1;
-                    end
-                end
-                if (rx_timer == TICK_LIMIT-1) begin
-                    rx_timer   <= 0;
-                    rx_bit_ctr <= rx_bit_ctr + 1;
                 end
             end
         end

@@ -5,7 +5,6 @@
 
 // Bit Masks
 #define TX_BUSY_MASK   (1 << 31)
-#define RX_VALID_MASK  (1 << 30)
 
 
 
@@ -25,9 +24,6 @@ int main(void)
 {
     volatile unsigned int *gpio = (unsigned int *)GPIO_ADDR;
     *gpio = 0x0;
-    
-    volatile unsigned int *uart = (unsigned int *)UART_ADDR;
-
 
     // Initialize outputs to 0
 
@@ -46,12 +42,6 @@ int main(void)
     }
 
     while(1) {
-        char rx_data = '\0';
-        unsigned int uart_data = 0;
-        while ((uart_data & RX_VALID_MASK) == 0) {
-            uart_data = *uart;
-        }
-        rx_data = uart_data & 0xFF; // Extract received data byte
-        put_char(rx_data);
+        // TX-only UART: remain idle after the greeting is sent.
     }
 }
